@@ -1,20 +1,14 @@
 [
-    {
-        "Name": "tropical"
-    },
-    {
-        "Name": "manner"
-    },
-    {
-        "Name": "wind"
-    },
-    {
-        "Name": "adult"
-    },
-    {
-        "Name": "liquid"
-    },
-    {
-        "Name": "recall"
-    }
+  {
+    "Name": "Boards"
+  },
+  {
+    "Name": "Hats"
+  },
+  {
+    "Name": "Boots"
+  },
+  {
+    "Name": "Gloves"
+  }
 ]
