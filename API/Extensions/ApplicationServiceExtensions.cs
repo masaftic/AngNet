@@ -1,6 +1,7 @@
 using Infrastructure.Data;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using API.Helpers;
 
 namespace API.Extensions;
 
@@ -16,5 +17,6 @@ public static class ApplicationServiceExtensions
 
 		services.AddScoped<IProductRepository, ProductRepository>();
 		services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+		services.AddAutoMapper(typeof(MappingProfiles));
 	}
 }
