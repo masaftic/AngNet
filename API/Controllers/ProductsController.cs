@@ -1,6 +1,8 @@
+using System.Linq.Expressions;
 using Azure.Core.Pipeline;
 using Core.Entities;
 using Core.Interfaces;
+using Core.Specifications;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,26 +15,26 @@ namespace API.Controllers;
 public class ProductsController : ControllerBase
 {
 	private readonly ILogger<ProductsController> _logger;
-    private readonly IGenericRepository<Product> _productsRepo;
-    private readonly IGenericRepository<ProductBrand> _productBrandRepo;
-    private readonly IGenericRepository<ProductType> _productTypeRepo;
+	private readonly IGenericRepository<Product> _productsRepo;
+	private readonly IGenericRepository<ProductBrand> _productBrandRepo;
+	private readonly IGenericRepository<ProductType> _productTypeRepo;
 
-    public ProductsController(
-		ILogger<ProductsController> logger, 
-		IGenericRepository<Product> productsRepo, 
-		IGenericRepository<ProductBrand> productBrandRepo, 
+	public ProductsController(
+		ILogger<ProductsController> logger,
+		IGenericRepository<Product> productsRepo,
+		IGenericRepository<ProductBrand> productBrandRepo,
 		IGenericRepository<ProductType> productTypeRepo)
 	{
 		_logger = logger;
-        _productsRepo = productsRepo;
-        _productBrandRepo = productBrandRepo;
-        _productTypeRepo = productTypeRepo;
-    }
+		_productsRepo = productsRepo;
+		_productBrandRepo = productBrandRepo;
+		_productTypeRepo = productTypeRepo;
+	}
 
 	[HttpGet]
 	public async Task<ActionResult<List<Product>>> GetProducts()
 	{
-		var products = await _productsRepo.ListAllAsync(); 
+		var products = await _productsRepo.ListAsync(new ProductsWithTypesAndBrandsSpecification());
 
 		return Ok(products);
 	}
@@ -41,7 +43,8 @@ public class ProductsController : ControllerBase
 	[Route("{id}")]
 	public async Task<ActionResult<Product>> GetProduct(int id)
 	{
-		var product = await _productsRepo.GetByIdAsync(id); 
+		var spec = new ProductsWithTypesAndBrandsSpecification(id);
+		var product = await _productsRepo.GetEntityWithSpec(spec);
 		return Ok(product);
 	}
 
