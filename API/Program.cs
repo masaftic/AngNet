@@ -1,22 +1,27 @@
 using API.Extensions;
+using API.Middleware;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerDocumentation();
+builder.Services.AddControllers();
+builder.Services.AddDbContext<StoreContext>(options =>
+{
+	options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 builder.Services.ConfigureApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-	app.UseDeveloperExceptionPage();
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
+
+app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseSwaggerDocumentation();
+
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
 app.UseRouting();
