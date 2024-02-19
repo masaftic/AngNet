@@ -16,10 +16,7 @@ public static class SwaggerServiceExtensions
     public static IApplicationBuilder UseSwaggerDocumentation(this IApplicationBuilder app)
     {
         app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/vi/swagger.json", "AngNet API v1");
-        });
+        app.UseSwaggerUI();
 
         return app;
     }
